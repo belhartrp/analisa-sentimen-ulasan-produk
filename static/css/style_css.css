@@ -1,0 +1,29 @@
+/* static/css/style.css */
+
+body {
+  background-color: #f5f6fa;
+}
+
+.card {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+#dropArea {
+  border-style: dashed !important;
+  background-color: #fafafa;
+  transition: background-color 0.2s ease;
+}
+
+#dropArea:hover {
+  background-color: #eef2ff;
+}
+
+.table-responsive {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.navbar-brand {
+  font-size: 1.1rem;
+}

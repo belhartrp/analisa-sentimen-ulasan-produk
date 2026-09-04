@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Upload Data — Sentimen Tokopedia{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">Halaman 1: Upload Data & Pengujian Manual</h2>
+
+<div class="card mb-4 p-3">
+  <label class="form-label fw-bold">Pilih Mode Aplikasi</label>
+  <div class="form-check form-switch fs-5">
+    <input class="form-check-input" type="checkbox" id="modeToggle">
+    <label class="form-check-label" for="modeToggle">
+      <span id="modeLabel">Mode 1: Gunakan Model Bawaan (Pre-Trained)</span>
+    </label>
+  </div>
+  <small class="text-muted">Aktifkan toggle untuk beralih ke Mode 2: Latih Dataset Saya (butuh kolom label).</small>
+</div>
+
+<div class="card mb-4 p-4" id="dropZone">
+  <div class="text-center border border-2 border-dashed rounded p-5" id="dropArea">
+    <p class="mb-1">📂 Seret & letakkan file CSV di sini, atau</p>
+    <input type="file" id="fileInput" accept=".csv" class="form-control w-auto mx-auto">
+    <p class="text-muted mt-2 small">
+      Mode 1: cukup kolom teks ulasan (mis. <code>text</code>/<code>ulasan</code>).<br>
+      Mode 2: wajib ada kolom label (mis. <code>label</code>/<code>sentimen</code> berisi Positif/Negatif).
+    </p>
+  </div>
+</div>
+
+<div class="card mb-4 p-3" id="kSliderCard" style="display:none;">
+  <label for="kSlider" class="form-label fw-bold">Jumlah Tetangga (K): <span id="kValue">5</span></label>
+  <input type="range" class="form-range" min="1" max="25" step="2" value="5" id="kSlider">
+</div>
+
+<div class="card mb-4 p-3">
+  <label for="manualText" class="form-label fw-bold">Atau Uji Satu Kalimat Ulasan</label>
+  <textarea class="form-control" id="manualText" rows="3"
+    placeholder="Contoh: min paking nya rusak, barang lama bgt kirimnya, kecewa"></textarea>
+</div>
+
+<button class="btn btn-primary btn-lg" id="submitBtn">Proses & Lanjutkan</button>
+<div id="statusMsg" class="mt-3"></div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Dashboard Evaluasi — Sentimen Tokopedia{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">Halaman 3: Dashboard Evaluasi / Prediksi</h2>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="card text-center p-3 border-primary">
+      <div class="fs-6 text-muted">Akurasi</div>
+      <div class="fs-3 fw-bold" id="metricAccuracy">-</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center p-3 border-success">
+      <div class="fs-6 text-muted">Presisi</div>
+      <div class="fs-3 fw-bold" id="metricPrecision">-</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center p-3 border-warning">
+      <div class="fs-6 text-muted">Recall</div>
+      <div class="fs-3 fw-bold" id="metricRecall">-</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center p-3 border-danger">
+      <div class="fs-6 text-muted">F1-Score</div>
+      <div class="fs-3 fw-bold" id="metricF1">-</div>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-5">
+    <h5>Confusion Matrix</h5>
+    <canvas id="confusionChart" height="250"></canvas>
+  </div>
+  <div class="col-md-7">
+    <h5>Tabel Hasil Prediksi</h5>
+    <div class="table-responsive" style="max-height:320px; overflow-y:auto;">
+      <table class="table table-sm table-bordered">
+        <thead class="table-dark sticky-top">
+          <tr><th>Ulasan</th><th>Label Aktual</th><th>Prediksi Sistem</th></tr>
+        </thead>
+        <tbody id="predictionTableBody">
+          <tr><td colspan="3" class="text-center text-muted">Belum ada hasil.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

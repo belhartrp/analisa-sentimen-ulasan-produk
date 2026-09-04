@@ -1,0 +1,9 @@
+flask==3.0.3
+scikit-learn==1.5.1
+scipy==1.13.1
+pandas==2.2.2
+numpy==1.26.4
+Sastrawi==1.0.1
+supabase==2.6.0
+python-dotenv==1.0.1
+gunicorn==22.0.0
