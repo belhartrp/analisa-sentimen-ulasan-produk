@@ -1,8 +1,13 @@
 """
-ml/slang_dict.py
-Kamus normalisasi istilah slang & singkatan khas ulasan e-commerce Tokopedia.
-Diterapkan SEBELUM tokenization agar frasa multi-kata (mis. "bintang 1") ikut tertangkap.
+ml/slang_dict.py  (VERSI PERBAIKAN — GANTI file slang_dict.py lamamu dengan ini)
+
+PERBAIKAN: sebelumnya pakai text.replace() biasa, yang mengganti "ga" di
+MANA SAJA termasuk di tengah kata lain (mis. "harga" -> "hartidak", "juga" ->
+"jutidak"). Sekarang pakai regex dengan \\b (word boundary) supaya HANYA kata
+yang berdiri sendiri persis yang diganti, bukan potongan dari kata lain.
 """
+
+import re
 
 TOKOPEDIA_SLANG_DICT: dict[str, str] = {
     # Sapaan / penjual
@@ -27,11 +32,9 @@ TOKOPEDIA_SLANG_DICT: dict[str, str] = {
     "packing": "kemasan",
     "po": "preorder",
     "kirim": "pengiriman",
-    "pengiriman": "pengiriman",
     "cod": "bayar di tempat",
     "resi": "nomor resi",
     "cepet": "cepat",
-    "lambat": "lambat",
     "lama bgt": "lama sekali",
 
     # Singkatan umum chat
@@ -53,7 +56,6 @@ TOKOPEDIA_SLANG_DICT: dict[str, str] = {
     "tp": "tapi",
     "krn": "karena",
     "karna": "karena",
-    "bgtu": "begitu",
     "gmn": "bagaimana",
     "gimana": "bagaimana",
     "dr": "dari",
@@ -71,27 +73,28 @@ TOKOPEDIA_SLANG_DICT: dict[str, str] = {
     "oke": "baik",
     "ok": "baik",
     "mantul": "mantap sekali",
-    "mantap": "mantap",
     "recomend": "rekomendasi",
     "rekomen": "rekomendasi",
     "rekomended": "rekomendasi",
-    "sesuai": "sesuai",
-    "gasesuai": "tidak sesuai",
     "ngecewain": "mengecewakan",
-    "kecewa": "kecewa",
-    "puas": "puas",
     "worth it": "sepadan",
     "worthit": "sepadan",
 }
 
+# Urutkan frasa dari yang PALING PANJANG dulu, supaya "bintang 1" dicek
+# lebih dulu daripada kata tunggal yang mungkin ada di dalamnya.
+_SORTED_PHRASES = sorted(TOKOPEDIA_SLANG_DICT.keys(), key=len, reverse=True)
+
 
 def apply_slang_normalization(text: str) -> str:
-    """Ganti setiap frasa/kata slang pada teks dengan padanan formalnya.
+    """Ganti kata/frasa slang dengan padanan formalnya.
 
-    Diurutkan berdasarkan panjang frasa (descending) agar frasa multi-kata
-    (mis. "bintang 1") tersubstitusi lebih dulu sebelum kata tunggal.
+    Memakai regex dengan \\b (word boundary) supaya HANYA kata yang berdiri
+    sendiri yang diganti — bukan potongan huruf yang kebetulan sama dengan
+    kata lain (mis. "ga" di dalam "harga" TIDAK akan ikut diganti).
     """
     result = text
-    for phrase in sorted(TOKOPEDIA_SLANG_DICT.keys(), key=len, reverse=True):
-        result = result.replace(phrase, TOKOPEDIA_SLANG_DICT[phrase])
+    for phrase in _SORTED_PHRASES:
+        pattern = r"\b" + re.escape(phrase) + r"\b"
+        result = re.sub(pattern, TOKOPEDIA_SLANG_DICT[phrase], result)
     return result
