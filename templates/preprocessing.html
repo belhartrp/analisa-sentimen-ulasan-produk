@@ -2,17 +2,19 @@
 {% block title %}Preview Preprocessing — Sentimen Tokopedia{% endblock %}
 
 {% block content %}
-<h2 class="mb-3">Halaman 2: Preview Preprocessing</h2>
-<p class="text-muted">
-  Tabel berikut membandingkan <strong>Teks Mentah</strong> dengan <strong>Teks Bersih</strong>
-  hasil pipeline (case folding → cleaning → normalisasi slang Tokopedia → tokenization →
-  stopword removal → stemming Sastrawi). Gunakan ini untuk memvalidasi kualitas pembersihan.
-</p>
+<div data-aos="fade-down">
+  <h2 class="mb-1"><i class="bi bi-magic text-success me-2"></i>Preview Preprocessing</h2>
+  <p class="text-muted mb-4">
+    Tabel berikut membandingkan <strong>Teks Mentah</strong> dengan <strong>Teks Bersih</strong>
+    hasil pipeline (case folding → normalisasi slang Tokopedia → cleaning → tokenization →
+    stopword removal → stemming Sastrawi). Gunakan ini untuk memvalidasi kualitas pembersihan.
+  </p>
+</div>
 
-<div id="balanceInfo" class="alert alert-info d-none"></div>
+<div id="balanceInfo" class="alert alert-info d-none" data-aos="fade-up"></div>
 
-<div class="table-responsive">
-  <table class="table table-striped table-bordered align-middle">
+<div class="table-responsive" data-aos="fade-up" data-aos-delay="100">
+  <table class="table table-striped table-bordered align-middle mb-0">
     <thead class="table-dark">
       <tr>
         <th>#</th>
@@ -22,12 +24,16 @@
       </tr>
     </thead>
     <tbody id="previewTableBody">
-      <tr><td colspan="4" class="text-center text-muted">Belum ada data. Silakan unggah CSV di Halaman 1.</td></tr>
+      <tr><td colspan="4" class="text-center text-muted py-4">Belum ada data. Silakan unggah CSV di Halaman 1.</td></tr>
     </tbody>
   </table>
 </div>
 
-<a href="/dashboard" class="btn btn-success">Lanjut ke Dashboard Evaluasi →</a>
+<div class="mt-4" data-aos="fade-up" data-aos-delay="150">
+  <a href="/dashboard" class="btn btn-success">
+    Lanjut ke Dashboard Evaluasi <i class="bi bi-arrow-right ms-1"></i>
+  </a>
+</div>
 {% endblock %}
 
 {% block scripts %}
