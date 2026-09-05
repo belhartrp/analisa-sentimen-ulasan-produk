@@ -1,7 +1,10 @@
 """
-ml/inference.py
-Mode 1: Prediksi Instan menggunakan model pre-trained (offline).
-Hanya melakukan transform() TF-IDF (bukan fit_transform), lalu predict().
+ml/inference.py  (VERSI UPDATE — GANTI file inference.py lamamu dengan ini)
+
+TAMBAHAN: predict_single() sekarang mengembalikan `neighbors` (daftar lengkap
+teks tetangga tidak tersedia karena Mode 1 tidak menyimpan teks asli data
+latih, hanya TF-IDF-nya) beserta jarak, bobot, dan confidence_score --
+untuk fitur Explainable AI di halaman uji kalimat manual.
 """
 
 from ml.preprocessing import preprocess_batch, preprocess_text
@@ -12,7 +15,6 @@ _model = None
 
 
 def _get_artifacts():
-    """Lazy-load model sekali per cold start (di-cache di level modul)."""
     global _vectorizer, _model
     if _vectorizer is None or _model is None:
         _vectorizer, _model = load_pretrained_artifacts()
@@ -20,36 +22,48 @@ def _get_artifacts():
 
 
 def predict_single(raw_text: str) -> dict:
-    """Prediksi sentimen untuk satu kalimat ulasan (dipakai textarea manual)."""
+    """Prediksi sentimen untuk satu kalimat ulasan, lengkap dengan rincian
+    Explainable AI (tetangga, jarak, bobot, confidence score)."""
     vectorizer, model = _get_artifacts()
     clean_text = preprocess_text(raw_text)
     X = vectorizer.transform([clean_text])
     detail = model.predict_with_detail(X)[0]
+
+    neighbors = [
+        {
+            "label": label,
+            "distance": round(dist, 4),
+            "weight": round(weight, 4),
+        }
+        for label, dist, weight in zip(
+            detail["neighbor_labels"], detail["neighbor_distances"], detail["weights"]
+        )
+    ]
+
     return {
         "raw_text": raw_text,
         "clean_text": clean_text,
         "prediction": detail["prediction"],
-        "confidence_detail": {
-            "neighbor_labels": detail["neighbor_labels"],
-            "neighbor_distances": [round(d, 4) for d in detail["neighbor_distances"]],
-            "vote_scores": {k: round(to_native(v), 4) for k, v in detail["vote_scores"].items()},
-        },
+        "confidence_score": detail["confidence_score"],
+        "neighbors": neighbors,
+        "vote_scores": {k: round(to_native(v), 4) for k, v in detail["vote_scores"].items()},
     }
 
 
 def predict_batch(raw_texts: list[str]) -> dict:
-    """Prediksi sentimen untuk banyak ulasan sekaligus (dipakai untuk upload CSV Mode 1)."""
+    """Prediksi sentimen untuk banyak ulasan sekaligus, dengan confidence score per baris."""
     vectorizer, model = _get_artifacts()
     clean_texts = preprocess_batch(raw_texts)
     X = vectorizer.transform(clean_texts)
-    predictions = model.predict(X)
+    detail_list = model.predict_with_detail(X)
 
     rows = [
         {
             "raw_text": raw,
             "clean_text": clean,
-            "prediction": str(pred),
+            "prediction": detail["prediction"],
+            "confidence_score": detail["confidence_score"],
         }
-        for raw, clean, pred in zip(raw_texts, clean_texts, predictions)
+        for raw, clean, detail in zip(raw_texts, clean_texts, detail_list)
     ]
     return {"rows": rows, "total": len(rows)}

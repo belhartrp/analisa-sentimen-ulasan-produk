@@ -4,6 +4,7 @@
 {% block content %}
 <h2 class="mb-3">Halaman 3: Dashboard Evaluasi / Prediksi</h2>
 
+<!-- ==================== BAGIAN A: METRIK UTAMA ==================== -->
 <div class="row g-3 mb-4">
   <div class="col-md-3">
     <div class="card text-center p-3 border-primary">
@@ -38,15 +39,78 @@
   </div>
   <div class="col-md-7">
     <h5>Tabel Hasil Prediksi</h5>
+    <div class="btn-group btn-group-sm mb-2" role="group">
+      <button class="btn btn-outline-secondary active" data-filter="all">Semua</button>
+      <button class="btn btn-outline-danger" data-filter="Negative">Hanya Negatif (Prioritas Balas)</button>
+      <button class="btn btn-outline-success" data-filter="Positive">Hanya Positif</button>
+    </div>
     <div class="table-responsive" style="max-height:320px; overflow-y:auto;">
       <table class="table table-sm table-bordered">
         <thead class="table-dark sticky-top">
-          <tr><th>Ulasan</th><th>Label Aktual</th><th>Prediksi Sistem</th></tr>
+          <tr><th>Ulasan</th><th>Label Aktual</th><th>Prediksi</th><th>Keyakinan</th></tr>
         </thead>
         <tbody id="predictionTableBody">
-          <tr><td colspan="3" class="text-center text-muted">Belum ada hasil.</td></tr>
+          <tr><td colspan="4" class="text-center text-muted">Belum ada hasil.</td></tr>
         </tbody>
       </table>
+    </div>
+  </div>
+</div>
+
+<hr class="my-4">
+
+<!-- ==================== BAGIAN B: PEMBUKTIAN AKADEMIS (WKNN) ==================== -->
+<h4 class="mb-3">📊 Pembuktian Algoritma (untuk Bab Hasil & Pembahasan)</h4>
+
+<div class="row mb-4">
+  <div class="col-md-6">
+    <h6>Kurva Performa Nilai K</h6>
+    <canvas id="kCurveChart" height="220"></canvas>
+    <small class="text-muted">Menunjukkan akurasi WKNN pada berbagai nilai K (3, 5, 7, 9, 11) untuk mencari titik K optimal.</small>
+  </div>
+  <div class="col-md-6">
+    <h6>Komparasi KNN Standar vs WKNN</h6>
+    <canvas id="comparisonChart" height="220"></canvas>
+    <small class="text-muted">Membuktikan apakah pembobotan jarak (WKNN) benar-benar mengungguli KNN mayoritas biasa.</small>
+  </div>
+</div>
+
+<div class="card p-3 mb-4">
+  <h6>Explainable AI — Rincian Tetangga (Uji Kalimat Manual)</h6>
+  <p class="text-muted small mb-2">Tabel ini menunjukkan K tetangga terdekat dari kalimat yang diuji di Halaman 1, lengkap dengan jarak cosine dan bobotnya, untuk membuktikan cara kerja voting WKNN.</p>
+  <div class="table-responsive">
+    <table class="table table-sm table-bordered">
+      <thead class="table-light">
+        <tr><th>#</th><th>Label Tetangga</th><th>Jarak Cosine</th><th>Bobot (1/jarak)</th></tr>
+      </thead>
+      <tbody id="neighborTableBody">
+        <tr><td colspan="4" class="text-center text-muted">Uji kalimat manual di Halaman 1 untuk melihat rincian ini.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<hr class="my-4">
+
+<!-- ==================== BAGIAN C: INSIGHT BISNIS UNTUK TOKO ==================== -->
+<h4 class="mb-3">🏪 Insight Bisnis untuk Pemilik Toko</h4>
+
+<div class="row mb-4">
+  <div class="col-md-4">
+    <h6>Rasio Kesehatan Ulasan</h6>
+    <canvas id="sentimentDonutChart" height="220"></canvas>
+  </div>
+  <div class="col-md-8">
+    <h6>Kata Kunci Dominan per Sentimen (Top 10, TF-IDF)</h6>
+    <div class="row">
+      <div class="col-md-6">
+        <p class="small fw-bold text-danger mb-1">Ulasan Negatif (Pain Points)</p>
+        <canvas id="negativeKeywordsChart" height="240"></canvas>
+      </div>
+      <div class="col-md-6">
+        <p class="small fw-bold text-success mb-1">Ulasan Positif (Kelebihan)</p>
+        <canvas id="positiveKeywordsChart" height="240"></canvas>
+      </div>
     </div>
   </div>
 </div>
