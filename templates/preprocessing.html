@@ -2,68 +2,48 @@
 {% block title %}Preview Preprocessing — Sentimen Tokopedia{% endblock %}
 
 {% block content %}
-<div data-aos="fade-down" class="mb-4">
-  <h2 class="mb-1">Preview Preprocessing</h2>
-  <p class="page-subtitle">Lihat hasil praproses data sebelum masuk ke tahap evaluasi.</p>
-</div>
-
-<!-- ============ RINGKASAN (khusus Mode 2) ============ -->
-<div id="summarySection" class="summary-box mb-4 d-none" data-aos="fade-up">
-  <h6 class="mb-3"><i class="bi bi-clipboard-data text-success me-1"></i>Ringkasan Dataset (Mode 2)</h6>
-  <div class="row g-3">
-    <div class="col-6 col-md-3">
+<div id="summarySection" class="card-box mb-4 d-none">
+  <div class="section-title mb-3"><span class="accent">Ringkasan</span> Dataset</div>
+  <div class="row g-3 mb-3">
+    <div class="col-4">
       <div class="summary-stat-label">Total Data</div>
       <div class="summary-stat-value" id="statTotal">-</div>
     </div>
-    <div class="col-6 col-md-3">
+    <div class="col-4">
       <div class="summary-stat-label">Setelah Undersampling</div>
       <div class="summary-stat-value" id="statAfter">-</div>
     </div>
-    <div class="col-6 col-md-3">
+    <div class="col-4">
       <div class="summary-stat-label">Nilai K</div>
       <div class="summary-stat-value" id="statK">-</div>
     </div>
   </div>
-  <hr>
-  <div class="row g-3">
-    <div class="col-md-6">
-      <div class="small fw-semibold mb-1">Distribusi Kelas (Sebelum)</div>
-      <div id="balanceBefore" class="d-flex gap-2 flex-wrap"></div>
-    </div>
-    <div class="col-md-6">
-      <div class="small fw-semibold mb-1">Distribusi Kelas (Sesudah)</div>
-      <div id="balanceAfter" class="d-flex gap-2 flex-wrap"></div>
-    </div>
-  </div>
+  <div class="balance-line">Distribusi Kelas (Sebelum)</div>
+  <div class="mb-2" id="balanceBefore">-</div>
+  <div class="balance-line">Distribusi Kelas (Sesudah)</div>
+  <div id="balanceAfter">-</div>
 </div>
 
-<!-- ============ TABEL PERBANDINGAN ============ -->
-<div data-aos="fade-up" data-aos-delay="80">
-  <h6 class="mb-2"><i class="bi bi-table text-success me-1"></i>Perbandingan Teks</h6>
-  <div class="table-responsive">
-    <table class="table table-striped align-middle mb-0">
-      <thead>
-        <tr>
-          <th style="width:50px;">No</th>
-          <th>Teks Mentah (Raw Text)</th>
-          <th>Teks Bersih (Clean Text)</th>
-          <th style="width:110px;">Label</th>
-        </tr>
-      </thead>
-      <tbody id="previewTableBody">
-        <tr><td colspan="4">
-          <div class="empty-state"><i class="bi bi-inbox"></i>Belum ada data. Silakan unggah CSV di Halaman 1.</div>
-        </td></tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="custom-pagination" id="previewPagination"></div>
+<div class="section-title"><span class="accent">Perbandingan</span> Teks</div>
+<div class="table-wrap">
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th style="width:40px;">No</th>
+        <th>Teks Mentah</th>
+        <th>Teks Bersih</th>
+        <th style="width:90px;">Label</th>
+      </tr>
+    </thead>
+    <tbody id="previewTableBody">
+      <tr><td colspan="4"><div class="empty-state"><i class="bi bi-inbox"></i>Belum ada data. Silakan unggah CSV di Halaman 1.</div></td></tr>
+    </tbody>
+  </table>
 </div>
+<div class="custom-pagination" id="previewPagination"></div>
 
-<div class="mt-4" data-aos="fade-up" data-aos-delay="120">
-  <a href="/dashboard" class="btn btn-success">
-    Lanjut ke Dashboard Evaluasi <i class="bi bi-arrow-right ms-1"></i>
-  </a>
+<div class="text-center mt-4">
+  <a href="/dashboard" class="btn-pill-outline">Lanjut ke Dashboard Evaluasi <i class="bi bi-arrow-right ms-1"></i></a>
 </div>
 {% endblock %}
 

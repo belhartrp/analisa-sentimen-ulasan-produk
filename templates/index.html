@@ -2,62 +2,53 @@
 {% block title %}Upload Data — Sentimen Tokopedia{% endblock %}
 
 {% block content %}
-<div class="mx-auto" style="max-width: 720px;">
+<div class="mx-auto" style="max-width: 640px;">
 
-  <div data-aos="fade-down" class="mb-4">
-    <h2 class="mb-1">Upload Data</h2>
-    <p class="page-subtitle">Masukkan dataset ulasan Tokopedia untuk dianalisis sentimennya.</p>
+  <h1 class="hero-title">Analisis sentimen produk<br>dalam <span class="accent">hitungan menit</span></h1>
+  <p class="hero-subtitle">
+    Semua yang Anda butuhkan untuk memahami opini pelanggan. Masukkan data ulasan, proses
+    sentimen secara otomatis, visualisasikan hasil, dan temukan insight bisnis dengan cepat.
+  </p>
+
+  <!-- ============ PILIH MODE ============ -->
+  <div class="section-title"><span class="accent">Pilih</span> Mode</div>
+
+  <label class="mode-option is-selected" id="modeOption1">
+    <span class="mode-radio-circle"></span>
+    <span>
+      <div class="mode-title">Gunakan Model Bawaan</div>
+      <div class="mode-desc">Menggunakan model yang sudah tersedia, tanpa perlu melatih dataset</div>
+    </span>
+    <input type="radio" name="modeRadio" value="predict" class="d-none" checked>
+  </label>
+
+  <label class="mode-option" id="modeOption2">
+    <span class="mode-radio-circle"></span>
+    <span>
+      <div class="mode-title">Latih Dataset Saya</div>
+      <div class="mode-desc">Melatih model menggunakan dataset Anda sendiri dengan pengaturan K</div>
+    </span>
+    <input type="radio" name="modeRadio" value="train" class="d-none">
+  </label>
+
+  <!-- ============ SLIDER K ============ -->
+  <div class="k-slider-wrap mt-4" id="kSliderCard" style="display:none;">
+    <div class="k-slider-label">Nilai K: <span class="accent" id="kValue">3</span></div>
+    <input type="range" min="1" max="25" step="2" value="3" id="kSlider">
   </div>
 
-  <div class="card p-4 mb-3" data-aos="fade-up">
+  <!-- ============ UPLOAD CSV ============ -->
+  <div class="section-title mt-4"><span class="accent">Upload</span> File CSV</div>
+  <div id="dropArea">
+    <i class="bi bi-cloud-arrow-up" style="font-size:2rem; color:var(--tp-green);"></i>
+    <p class="dropzone-title mt-2">Drag &amp; drop file CSV di sini</p>
+    <p class="dropzone-or">atau</p>
+    <label class="btn-pill-primary" style="width:auto; padding:0.6rem 1.6rem; cursor:pointer;">
+      Pilih File
+      <input type="file" id="fileInput" accept=".csv" class="d-none">
+    </label>
 
-    <!-- ============ PILIH MODE ============ -->
-    <label class="form-label fw-bold mb-2">Pilih Mode</label>
-    <div class="row g-2 mb-4">
-      <div class="col-md-6">
-        <label class="mode-option d-block is-selected" id="modeOption1">
-          <div class="d-flex justify-content-between align-items-start">
-            <div>
-              <div class="mode-title"><i class="bi bi-cpu me-1 text-success"></i>Gunakan Model Bawaan</div>
-              <div class="mode-desc">(Pre-Trained) — Menggunakan model yang sudah tersedia, tanpa perlu melatih dataset.</div>
-            </div>
-            <input class="form-check-input mt-1" type="radio" name="modeRadio" value="predict" checked>
-          </div>
-        </label>
-      </div>
-      <div class="col-md-6">
-        <label class="mode-option d-block" id="modeOption2">
-          <div class="d-flex justify-content-between align-items-start">
-            <div>
-              <div class="mode-title"><i class="bi bi-sliders me-1 text-success"></i>Latih Dataset Saya</div>
-              <div class="mode-desc">(Custom Training) — Melatih model menggunakan dataset Anda sendiri dengan pengaturan K.</div>
-            </div>
-            <input class="form-check-input mt-1" type="radio" name="modeRadio" value="train">
-          </div>
-        </label>
-      </div>
-    </div>
-
-    <!-- ============ SLIDER K (Mode 2 saja) ============ -->
-    <div id="kSliderCard" class="mb-4" style="display:none;">
-      <label for="kSlider" class="form-label fw-bold">Nilai K: <span id="kValue" class="text-success">5</span></label>
-      <input type="range" class="form-range" min="1" max="25" step="2" value="5" id="kSlider">
-      <div class="d-flex justify-content-between small text-muted"><span>1</span><span>25</span></div>
-    </div>
-
-    <!-- ============ UPLOAD CSV ============ -->
-    <label class="form-label fw-bold mb-2">Upload File CSV</label>
-    <div id="dropArea" class="text-center rounded p-4 mb-2">
-      <i class="bi bi-cloud-arrow-up display-5 text-success"></i>
-      <p class="mb-1 mt-2 fw-semibold">Drag &amp; drop file CSV di sini</p>
-      <p class="text-muted small mb-2">atau</p>
-      <label class="btn btn-primary btn-sm mb-0">
-        Pilih File
-        <input type="file" id="fileInput" accept=".csv" class="d-none">
-      </label>
-    </div>
-
-    <div id="fileChipWrapper" class="mb-2 d-none">
+    <div id="fileChipWrapper" class="d-none text-start">
       <div class="file-chip">
         <span class="file-icon"><i class="bi bi-filetype-csv"></i></span>
         <div>
@@ -67,28 +58,23 @@
         <span class="file-remove" id="fileChipRemove"><i class="bi bi-x-circle"></i></span>
       </div>
     </div>
-
-    <p class="text-muted small mb-4" id="formatHint">
-      Format CSV (Mode 1): 2 kolom (teks, label opsional) · Encoding UTF-8
-    </p>
-
-    <!-- ============ UJI KALIMAT MANUAL ============ -->
-    <label for="manualText" class="form-label fw-bold">
-      <i class="bi bi-chat-square-text me-1 text-success"></i>Atau Uji Satu Kalimat Ulasan
-    </label>
-    <textarea class="form-control mb-1" id="manualText" rows="3"
-      placeholder="Contoh: min paking nya rusak, barang lama bgt kirimnya, kecewa"></textarea>
-    <p class="text-muted small mb-4">
-      Isi kalimat ini untuk melihat rincian <strong>Explainable AI</strong> (tetangga terdekat &amp; bobot WKNN) di Dashboard.
-    </p>
-
-    <!-- ============ SUBMIT ============ -->
-    <button class="btn btn-primary w-100" id="submitBtn">
-      <span id="submitBtnText">Proses &amp; Lanjutkan</span>
-      <i class="bi bi-arrow-right ms-1" id="submitBtnIcon"></i>
-    </button>
-    <div id="statusMsg" class="mt-3 small text-center"></div>
   </div>
+  <p class="text-muted small mt-2" id="formatHint">
+    Format CSV (Mode 1): cukup 1 kolom teks ulasan (label opsional) · Encoding UTF-8
+  </p>
+
+  <!-- ============ UJI KALIMAT MANUAL ============ -->
+  <div class="section-title mt-4"><span class="accent">Uji</span> Satu Kalimat Ulasan</div>
+  <textarea class="form-control" id="manualText" rows="3" placeholder="Min packingnya rusak"></textarea>
+  <p class="text-muted small mt-2 mb-4">
+    Isi kalimat ini untuk melihat rincian Explainable AI (tetangga terdekat &amp; bobot WKNN) di Dashboard.
+  </p>
+
+  <!-- ============ SUBMIT ============ -->
+  <button class="btn-pill-primary" id="submitBtn">
+    <span id="submitBtnText">Proses dan Lanjutkan</span>
+  </button>
+  <div id="statusMsg" class="mt-3 small text-center"></div>
 </div>
 {% endblock %}
 

@@ -11,76 +11,63 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
-<div class="page-blob-tl"></div>
-<div class="page-blob-br"></div>
-
-<nav class="navbar navbar-expand-lg sticky-top custom-navbar">
-  <div class="container-fluid px-4">
-    <a class="navbar-brand" href="/">
+<!-- ============ NAVBAR (mobile & desktop) ============ -->
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="/" class="brand">
       <span class="brand-icon"><i class="bi bi-shop-window"></i></span>
-      Sentimen Tokopedia
+      <span>Sentimen Tokopedia</span>
       <span class="badge-wknn">WKNN</span>
     </a>
 
-    <!-- Step Indicator (desktop) -->
-    <div class="step-indicator d-none d-lg-flex" id="stepIndicator">
-      <a href="/" class="step-item {{ 'is-active' if active_page == 'upload' else '' }} {{ 'is-done' if step_done_upload else '' }}">
-        <span class="step-circle">1</span><span class="step-label">Upload Data</span>
-      </a>
-      <span class="step-line"></span>
-      <a href="/preprocessing" class="step-item {{ 'is-active' if active_page == 'preprocessing' else '' }} {{ 'is-done' if step_done_preprocessing else '' }}">
-        <span class="step-circle">2</span><span class="step-label">Preprocessing</span>
-      </a>
-      <span class="step-line"></span>
-      <a href="/dashboard" class="step-item {{ 'is-active' if active_page == 'dashboard' else '' }}">
-        <span class="step-circle">3</span><span class="step-label">Dashboard</span>
-      </a>
+    <!-- Nav desktop -->
+    <div class="desktop-nav d-none d-lg-flex">
+      <a href="/" class="{{ 'is-active' if active_page == 'upload' else '' }}">Upload Data</a>
+      <a href="/preprocessing" class="{{ 'is-active' if active_page == 'preprocessing' else '' }}">Preprocessing</a>
+      <a href="/dashboard" class="{{ 'is-active' if active_page == 'dashboard' else '' }}">Dashboard</a>
     </div>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
-      <span class="navbar-toggler-icon"></span>
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Buka menu">
+      <i class="bi bi-list"></i>
     </button>
-    <div class="collapse navbar-collapse d-lg-none" id="navContent">
-      <ul class="navbar-nav ms-auto gap-2 mt-2">
-        <li class="nav-item"><a class="nav-link" href="/"><i class="bi bi-cloud-upload me-1"></i>Upload Data</a></li>
-        <li class="nav-item"><a class="nav-link" href="/preprocessing"><i class="bi bi-magic me-1"></i>Preprocessing</a></li>
-        <li class="nav-item"><a class="nav-link" href="/dashboard"><i class="bi bi-bar-chart-line me-1"></i>Dashboard</a></li>
-      </ul>
-    </div>
   </div>
 </nav>
 
-<!-- Bottom nav khusus mobile, meniru mockup -->
-<nav class="mobile-bottom-nav d-lg-none">
-  <a href="/" class="{{ 'is-active' if active_page == 'upload' else '' }}">
-    <i class="bi bi-cloud-upload"></i><span>Upload Data</span>
-  </a>
-  <a href="/preprocessing" class="{{ 'is-active' if active_page == 'preprocessing' else '' }}">
-    <i class="bi bi-magic"></i><span>Preprocessing</span>
-  </a>
-  <a href="/dashboard" class="{{ 'is-active' if active_page == 'dashboard' else '' }}">
-    <i class="bi bi-bar-chart-line"></i><span>Dashboard</span>
-  </a>
-</nav>
+<!-- ============ FULLSCREEN MENU (mobile) ============ -->
+<div class="fullscreen-menu" id="fullscreenMenu">
+  <button class="close-menu-btn" id="closeMenuBtn" aria-label="Tutup menu">
+    <i class="bi bi-x-lg"></i>
+  </button>
+  <div class="fullscreen-menu-content">
+    <span class="fullscreen-menu-title">MENU</span>
+    <a href="/" class="{{ 'is-active' if active_page == 'upload' else '' }}">Upload Data</a>
+    <a href="/preprocessing" class="{{ 'is-active' if active_page == 'preprocessing' else '' }}">Preprocessing</a>
+    <a href="/dashboard" class="{{ 'is-active' if active_page == 'dashboard' else '' }}">Dashboard</a>
+  </div>
+</div>
 
-<main class="container py-4 fade-in-page main-content">
+<main class="page-container">
   {% block content %}{% endblock %}
 </main>
 
-<footer class="text-center text-muted small py-4">
-  © 2026 Sentimen Tokopedia. Dibuat dengan <i class="bi bi-heart-fill text-success"></i> untuk analisis yang lebih baik.
+<footer class="footer-note">
+  © 2026 Sentimen Tokopedia. Dibuat untuk analisis yang lebih baik.
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 <script>
-  AOS.init({ duration: 600, once: true, easing: "ease-out-cubic" });
+  const hamburgerBtn = document.getElementById("hamburgerBtn");
+  const closeMenuBtn = document.getElementById("closeMenuBtn");
+  const fullscreenMenu = document.getElementById("fullscreenMenu");
+
+  hamburgerBtn.addEventListener("click", () => fullscreenMenu.classList.add("is-open"));
+  closeMenuBtn.addEventListener("click", () => fullscreenMenu.classList.remove("is-open"));
+  fullscreenMenu.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => fullscreenMenu.classList.remove("is-open")));
 </script>
 {% block scripts %}{% endblock %}
 </body>

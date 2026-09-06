@@ -1,6 +1,4 @@
-// static/js/upload.js (VERSI REDESIGN — GANTI file upload.js lamamu dengan ini)
-// Perubahan: mode dipilih lewat 2 kartu (bukan toggle switch tunggal),
-// ditambah file-chip preview, dan textarea manual selalu tampil.
+// static/js/upload.js (VERSI FINAL — GANTI file upload.js lamamu dengan ini)
 
 const modeOption1 = document.getElementById("modeOption1");
 const modeOption2 = document.getElementById("modeOption2");
@@ -18,7 +16,6 @@ const formatHint = document.getElementById("formatHint");
 const manualText = document.getElementById("manualText");
 const submitBtn = document.getElementById("submitBtn");
 const submitBtnText = document.getElementById("submitBtnText");
-const submitBtnIcon = document.getElementById("submitBtnIcon");
 const statusMsg = document.getElementById("statusMsg");
 
 let selectedFile = null;
@@ -49,7 +46,8 @@ function showFileChip(file) {
   fileChipSize.textContent = (file.size / (1024 * 1024)).toFixed(2) + " MB";
 }
 
-fileChipRemove.addEventListener("click", () => {
+fileChipRemove.addEventListener("click", (e) => {
+  e.preventDefault();
   selectedFile = null;
   fileInput.value = "";
   fileChipWrapper.classList.add("d-none");
@@ -72,8 +70,7 @@ fileInput.addEventListener("change", (e) => {
 
 function setLoading(isLoading) {
   submitBtn.disabled = isLoading;
-  submitBtnText.textContent = isLoading ? "Memproses..." : "Proses & Lanjutkan";
-  submitBtnIcon.className = isLoading ? "bi bi-arrow-repeat ms-1 spin" : "bi bi-arrow-right ms-1";
+  submitBtnText.textContent = isLoading ? "Memproses..." : "Proses dan Lanjutkan";
 }
 
 submitBtn.addEventListener("click", async () => {
@@ -81,7 +78,7 @@ submitBtn.addEventListener("click", async () => {
   const text = manualText.value.trim();
 
   if (!selectedFile && !text) {
-    statusMsg.innerHTML = `<span class="text-danger"><i class="bi bi-exclamation-circle me-1"></i>Unggah CSV atau isi teks manual terlebih dahulu.</span>`;
+    statusMsg.innerHTML = `<span class="text-negative">Unggah CSV atau isi teks manual terlebih dahulu.</span>`;
     return;
   }
 
@@ -92,7 +89,7 @@ submitBtn.addEventListener("click", async () => {
 
   const endpoint = training ? "/api/train" : "/api/predict";
   setLoading(true);
-  statusMsg.innerHTML = `<span class="text-muted"><i class="bi bi-arrow-repeat me-1"></i>Memproses data...</span>`;
+  statusMsg.innerHTML = `<span class="text-muted">Memproses data...</span>`;
 
   try {
     const res = await fetch(endpoint, { method: "POST", body: formData });
@@ -100,17 +97,17 @@ submitBtn.addEventListener("click", async () => {
 
     if (data.status !== "ok") {
       setLoading(false);
-      statusMsg.innerHTML = `<span class="text-danger"><i class="bi bi-x-circle me-1"></i>${data.message}</span>`;
+      statusMsg.innerHTML = `<span class="text-negative">${data.message}</span>`;
       return;
     }
 
     sessionStorage.setItem("lastResult", JSON.stringify(data));
     sessionStorage.setItem("lastMode", training ? "training" : "predict");
 
-    statusMsg.innerHTML = `<span class="text-success"><i class="bi bi-check-circle me-1"></i>Berhasil! Mengarahkan ke halaman Preprocessing...</span>`;
+    statusMsg.innerHTML = `<span class="text-positive">Berhasil! Mengarahkan ke halaman Preprocessing...</span>`;
     setTimeout(() => (window.location.href = "/preprocessing"), 700);
   } catch (err) {
     setLoading(false);
-    statusMsg.innerHTML = `<span class="text-danger">Terjadi kesalahan: ${err.message}</span>`;
+    statusMsg.innerHTML = `<span class="text-negative">Terjadi kesalahan: ${err.message}</span>`;
   }
 });

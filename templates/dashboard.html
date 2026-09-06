@@ -2,148 +2,103 @@
 {% block title %}Dashboard Evaluasi — Sentimen Tokopedia{% endblock %}
 
 {% block content %}
-<div data-aos="fade-down" class="mb-4">
-  <h2 class="mb-1">Dashboard Evaluasi / Prediksi</h2>
-  <p class="page-subtitle">Hasil prediksi, metrik performa, dan insight sentimen ulasan Tokopedia.</p>
-</div>
-
-<div id="mode1Notice" class="alert alert-info d-none mb-4" data-aos="fade-up">
-  <i class="bi bi-info-circle me-1"></i>
+<div id="mode1Notice" class="card-box mb-4 d-none" style="border-color:#cdeeda;">
+  <i class="bi bi-info-circle text-success me-1"></i>
   Kamu sedang melihat hasil <strong>Mode 1 (Prediksi Instan)</strong>. Bagian "Pembuktian Algoritma"
-  di bawah tidak tersedia karena mode ini tidak melakukan training/evaluasi ulang — cuma memuat model
-  yang sudah jadi dan langsung memprediksi.
+  di bawah tidak tersedia karena mode ini tidak melakukan training/evaluasi ulang.
 </div>
 
-<!-- ============ BAGIAN A: METRIK UTAMA ============ -->
+<!-- ============ METRIK UTAMA ============ -->
 <div class="row g-3 mb-4">
-  <div class="col-6 col-md-3" data-aos="zoom-in" data-aos-delay="0">
-    <div class="card metric-card" id="cardAccuracy">
-      <div class="metric-icon"><i class="bi bi-bullseye"></i></div>
-      <div class="metric-label">Akurasi</div>
-      <div class="metric-value" id="metricAccuracy">-</div>
-    </div>
+  <div class="col-6 col-md-3">
+    <div class="metric-card"><div class="metric-label">Akurasi</div><div class="metric-value" id="metricAccuracy">-</div></div>
   </div>
-  <div class="col-6 col-md-3" data-aos="zoom-in" data-aos-delay="60">
-    <div class="card metric-card" id="cardPrecision">
-      <div class="metric-icon"><i class="bi bi-check2-circle"></i></div>
-      <div class="metric-label">Presisi</div>
-      <div class="metric-value" id="metricPrecision">-</div>
-    </div>
+  <div class="col-6 col-md-3">
+    <div class="metric-card"><div class="metric-label">Presisi</div><div class="metric-value" id="metricPrecision">-</div></div>
   </div>
-  <div class="col-6 col-md-3" data-aos="zoom-in" data-aos-delay="120">
-    <div class="card metric-card" id="cardRecall">
-      <div class="metric-icon"><i class="bi bi-arrow-repeat"></i></div>
-      <div class="metric-label">Recall</div>
-      <div class="metric-value" id="metricRecall">-</div>
-    </div>
+  <div class="col-6 col-md-3">
+    <div class="metric-card"><div class="metric-label">Recall</div><div class="metric-value" id="metricRecall">-</div></div>
   </div>
-  <div class="col-6 col-md-3" data-aos="zoom-in" data-aos-delay="180">
-    <div class="card metric-card" id="cardF1">
-      <div class="metric-icon"><i class="bi bi-graph-up"></i></div>
-      <div class="metric-label">F1-Score</div>
-      <div class="metric-value" id="metricF1">-</div>
-    </div>
+  <div class="col-6 col-md-3">
+    <div class="metric-card"><div class="metric-label">F1-Score</div><div class="metric-value" id="metricF1">-</div></div>
   </div>
 </div>
 
-<!-- ============ BAGIAN B: DISTRIBUSI PREDIKSI + TABEL ============ -->
-<div class="row mb-4">
-  <div class="col-lg-5" data-aos="fade-right">
-    <div class="card p-3 h-100" id="cardConfusion">
-      <h6 class="mb-3"><i class="bi bi-grid-3x3-gap text-success me-1"></i>Distribusi Prediksi</h6>
-      <canvas id="confusionChart" height="240"></canvas>
-    </div>
-  </div>
-  <div class="col-lg-7" data-aos="fade-left">
-    <div class="card p-3 h-100">
-      <h6 class="mb-2"><i class="bi bi-table text-success me-1"></i>Tabel Hasil Prediksi</h6>
-      <div class="btn-group btn-group-sm mb-2 flex-wrap" role="group">
-        <button class="btn btn-outline-secondary active" data-filter="all">Semua</button>
-        <button class="btn btn-outline-danger" data-filter="Negative">Hanya Negatif (Prioritas Balas)</button>
-        <button class="btn btn-outline-success" data-filter="Positive">Hanya Positif</button>
-      </div>
-      <div class="table-responsive">
-        <table class="table table-sm mb-0">
-          <thead>
-            <tr><th>Ulasan</th><th style="width:100px;">Aktual</th><th style="width:100px;">Prediksi</th><th style="width:80px;">Skor</th></tr>
-          </thead>
-          <tbody id="predictionTableBody">
-            <tr><td colspan="4"><div class="empty-state"><i class="bi bi-inbox"></i>Belum ada hasil.</div></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="custom-pagination" id="predictionPagination"></div>
-    </div>
-  </div>
+<!-- ============ DISTRIBUSI PREDIKSI ============ -->
+<div class="section-title"><span class="accent">Distribusi</span> Prediksi</div>
+<div class="chart-card mb-4">
+  <canvas id="confusionChart" height="220"></canvas>
 </div>
 
-<hr class="my-4">
-
-<!-- ============ BAGIAN C: PEMBUKTIAN AKADEMIS ============ -->
-<div data-aos="fade-up">
-  <h4 class="mb-3"><i class="bi bi-mortarboard text-success me-2"></i>Pembuktian Algoritma</h4>
+<!-- ============ TABEL HASIL PREDIKSI ============ -->
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+  <div class="section-title mb-0"><span class="accent">Tabel</span> Hasil Prediksi</div>
+  <div class="filter-tabs">
+    <button class="active filter-all" data-filter="all">Semua</button>
+    <button class="filter-neg" data-filter="Negative">Negatif</button>
+    <button class="filter-pos" data-filter="Positive">Positif</button>
+  </div>
 </div>
+<div class="table-wrap">
+  <table class="styled-table">
+    <thead><tr><th>Ulasan</th><th style="width:90px;">Aktual</th><th style="width:90px;">Prediksi</th><th style="width:70px;">Skor</th></tr></thead>
+    <tbody id="predictionTableBody">
+      <tr><td colspan="4"><div class="empty-state"><i class="bi bi-inbox"></i>Belum ada hasil.</div></td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="custom-pagination" id="predictionPagination"></div>
 
+<hr class="my-5" style="border-color:#eaf3ee;">
+
+<!-- ============ PEMBUKTIAN ALGORITMA ============ -->
+<div class="section-title"><span class="accent">Pembuktian</span> Algoritma</div>
 <div id="academicSection">
-  <div class="row mb-4">
-    <div class="col-md-6" data-aos="fade-right">
-      <div class="card p-3 h-100">
+  <div class="row g-3 mb-4">
+    <div class="col-md-6">
+      <div class="chart-card h-100">
         <h6>Kurva Performa Nilai K</h6>
         <canvas id="kCurveChart" height="220"></canvas>
       </div>
     </div>
-    <div class="col-md-6" data-aos="fade-left">
-      <div class="card p-3 h-100">
+    <div class="col-md-6">
+      <div class="chart-card h-100">
         <h6>KNN vs WKNN (Perbandingan)</h6>
         <canvas id="comparisonChart" height="220"></canvas>
       </div>
     </div>
   </div>
 
-  <div class="card p-3 mb-4" data-aos="fade-up">
-    <h6><i class="bi bi-diagram-3 me-1"></i>Explainable AI (K Tetangga Terdekat)</h6>
-    <div class="table-responsive">
-      <table class="table table-sm mb-0">
-        <thead>
-          <tr><th style="width:50px;">No</th><th>Label Tetangga</th><th>Jarak Cosine</th><th>Bobot</th></tr>
-        </thead>
-        <tbody id="neighborTableBody">
-          <tr><td colspan="4"><div class="empty-state"><i class="bi bi-search"></i>Uji kalimat manual di Halaman 1 untuk melihat rincian ini.</div></td></tr>
-        </tbody>
-      </table>
-    </div>
+  <div class="section-title">
+    <i class="bi bi-diagram-3 accent me-1"></i>Explainable AI (K Tetangga Terdekat)
+  </div>
+  <div class="table-wrap mb-4">
+    <table class="styled-table">
+      <thead><tr><th style="width:40px;">No</th><th>Label Tetangga</th><th>Jarak Cosine</th><th>Bobot</th></tr></thead>
+      <tbody id="neighborTableBody">
+        <tr><td colspan="4"><div class="empty-state"><i class="bi bi-search"></i>Uji kalimat manual di Halaman 1 untuk melihat rincian ini.</div></td></tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
-<hr class="my-4">
+<hr class="my-5" style="border-color:#eaf3ee;">
 
-<!-- ============ BAGIAN D: INSIGHT BISNIS ============ -->
-<div data-aos="fade-up">
-  <h4 class="mb-3"><i class="bi bi-shop text-success me-2"></i>Insight Bisnis untuk Toko</h4>
-</div>
+<!-- ============ INSIGHT BISNIS TOKO ============ -->
+<div class="section-title"><span class="accent">Insight Bisnis</span> Toko</div>
+<div class="card-box mb-4">
+  <h6 class="text-center mb-3">Rasio Sentimen</h6>
+  <canvas id="sentimentDonutChart" height="200"></canvas>
 
-<div class="row mb-4">
-  <div class="col-md-4" data-aos="fade-right">
-    <div class="card p-3 h-100">
-      <h6>Rasio Sentimen</h6>
-      <canvas id="sentimentDonutChart" height="220"></canvas>
-    </div>
-  </div>
-  <div class="col-md-8" data-aos="fade-left">
-    <div class="card p-3 h-100">
-      <h6>Kata Kunci Dominan (Top 10, TF-IDF)</h6>
-      <div class="row">
-        <div class="col-md-6">
-          <p class="small fw-bold text-danger mb-1">Top 10 Kata Kunci Negatif</p>
-          <canvas id="negativeKeywordsChart" height="240"></canvas>
-        </div>
-        <div class="col-md-6">
-          <p class="small fw-bold text-success mb-1">Top 10 Kata Kunci Positif</p>
-          <canvas id="positiveKeywordsChart" height="240"></canvas>
-        </div>
-      </div>
-    </div>
-  </div>
+  <hr class="my-4">
+
+  <p class="fw-bold text-negative mb-2">Top 10 Kata Kunci Negatif</p>
+  <canvas id="negativeKeywordsChart" height="220"></canvas>
+
+  <hr class="my-4">
+
+  <p class="fw-bold text-positive mb-2">Top 10 Kata Kunci Positif</p>
+  <canvas id="positiveKeywordsChart" height="220"></canvas>
 </div>
 {% endblock %}
 
