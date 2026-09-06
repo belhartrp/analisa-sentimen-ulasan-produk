@@ -3,38 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{% block title %}Analisis Sentimen Tokopedia{% endblock %}</title>
+<title>{% block title %}Sentimen Tokopedia — WKNN{% endblock %}</title>
 
-<!-- Font Fredoka -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
 
-<!-- Bootstrap 5 -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Bootstrap Icons (untuk ikon di navbar/kartu) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
-<!-- AOS (Animate On Scroll) -->
 <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
-
-<!-- CSS kustom (tema hijau-putih) -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
+<div class="page-blob-tl"></div>
+<div class="page-blob-br"></div>
+
 <nav class="navbar navbar-expand-lg sticky-top custom-navbar">
   <div class="container-fluid px-4">
     <a class="navbar-brand" href="/">
-      <i class="bi bi-shop-window me-2"></i>Sentimen Tokopedia
+      <span class="brand-icon"><i class="bi bi-shop-window"></i></span>
+      Sentimen Tokopedia
       <span class="badge-wknn">WKNN</span>
     </a>
+
+    <!-- Step Indicator (desktop) -->
+    <div class="step-indicator d-none d-lg-flex" id="stepIndicator">
+      <a href="/" class="step-item {{ 'is-active' if active_page == 'upload' else '' }} {{ 'is-done' if step_done_upload else '' }}">
+        <span class="step-circle">1</span><span class="step-label">Upload Data</span>
+      </a>
+      <span class="step-line"></span>
+      <a href="/preprocessing" class="step-item {{ 'is-active' if active_page == 'preprocessing' else '' }} {{ 'is-done' if step_done_preprocessing else '' }}">
+        <span class="step-circle">2</span><span class="step-label">Preprocessing</span>
+      </a>
+      <span class="step-line"></span>
+      <a href="/dashboard" class="step-item {{ 'is-active' if active_page == 'dashboard' else '' }}">
+        <span class="step-circle">3</span><span class="step-label">Dashboard</span>
+      </a>
+    </div>
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navContent">
-      <ul class="navbar-nav ms-auto gap-lg-2">
+    <div class="collapse navbar-collapse d-lg-none" id="navContent">
+      <ul class="navbar-nav ms-auto gap-2 mt-2">
         <li class="nav-item"><a class="nav-link" href="/"><i class="bi bi-cloud-upload me-1"></i>Upload Data</a></li>
         <li class="nav-item"><a class="nav-link" href="/preprocessing"><i class="bi bi-magic me-1"></i>Preprocessing</a></li>
         <li class="nav-item"><a class="nav-link" href="/dashboard"><i class="bi bi-bar-chart-line me-1"></i>Dashboard</a></li>
@@ -43,20 +55,32 @@
   </div>
 </nav>
 
-<main class="container py-4 fade-in-page">
+<!-- Bottom nav khusus mobile, meniru mockup -->
+<nav class="mobile-bottom-nav d-lg-none">
+  <a href="/" class="{{ 'is-active' if active_page == 'upload' else '' }}">
+    <i class="bi bi-cloud-upload"></i><span>Upload Data</span>
+  </a>
+  <a href="/preprocessing" class="{{ 'is-active' if active_page == 'preprocessing' else '' }}">
+    <i class="bi bi-magic"></i><span>Preprocessing</span>
+  </a>
+  <a href="/dashboard" class="{{ 'is-active' if active_page == 'dashboard' else '' }}">
+    <i class="bi bi-bar-chart-line"></i><span>Dashboard</span>
+  </a>
+</nav>
+
+<main class="container py-4 fade-in-page main-content">
   {% block content %}{% endblock %}
 </main>
 
 <footer class="text-center text-muted small py-4">
-  Sentimen Tokopedia — WKNN Engine · Dibuat untuk keperluan penelitian
+  © 2026 Sentimen Tokopedia. Dibuat dengan <i class="bi bi-heart-fill text-success"></i> untuk analisis yang lebih baik.
 </footer>
 
-<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 <script>
-  AOS.init({ duration: 700, once: true, easing: "ease-out-cubic" });
+  AOS.init({ duration: 600, once: true, easing: "ease-out-cubic" });
 </script>
 {% block scripts %}{% endblock %}
 </body>

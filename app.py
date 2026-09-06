@@ -30,19 +30,38 @@ app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # batas upload 10MB
 # Halaman (Views)
 # ---------------------------------------------------------------------------
 
+# @app.route("/")
+# def index():
+#     return render_template("index.html")
+
+
+# @app.route("/preprocessing")
+# def preprocessing_page():
+#     return render_template("preprocessing.html")
+
+
+# @app.route("/dashboard")
+# def dashboard_page():
+#     return render_template("dashboard.html")
+
+
+# GANTI route index() yang lama:
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", active_page="upload")
 
 
+# GANTI route preprocessing_page() yang lama:
 @app.route("/preprocessing")
 def preprocessing_page():
-    return render_template("preprocessing.html")
+    return render_template("preprocessing.html", active_page="preprocessing")
 
 
+# GANTI route dashboard_page() yang lama:
 @app.route("/dashboard")
 def dashboard_page():
-    return render_template("dashboard.html")
+    return render_template("dashboard.html", active_page="dashboard")
+
 
 
 # ---------------------------------------------------------------------------
